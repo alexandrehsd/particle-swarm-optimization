@@ -4,13 +4,13 @@
    ind_pos -> individual particle position
 */
 function [fitness] = fit(ind_pos)
-    x = ind_pos(1,1);
-    y = ind_pos(1,2);
+    x1 = ind_pos(1,1);
+    x2 = ind_pos(1,2);
     
-    z = -x*sin(sqrt(abs(x))) - y*sin(sqrt(abs(y)));
-    r = 100*(y-x^2)^2+(1-x)^2;
+    c = -x1*sin(sqrt(abs(x1))) - x2*sin(sqrt(abs(x2)));
+    d = 100*(x2-x1^2)^2+(1-x1)^2;
     
-    fitness =  r + z;
+    fitness = c + d;
 endfunction
 
 /* Update the best position of a particle
