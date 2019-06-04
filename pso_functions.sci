@@ -46,6 +46,8 @@ function [new_Gbest] = getGlobal_best(old_Gbest, p_bests_vec, pop_sz)
     // Updating (or not) the global best position
     if minimum < fit(old_Gbest) then
         new_Gbest = p_bests_vec(index,:);
+    else
+        new_Gbest = old_Gbest;
     end
 endfunction
 
@@ -60,10 +62,22 @@ endfunction
    ind_pbest -> best individual position
    Gbest -> Global best position
 */
-function [new_vel] = update_vel(old_vel, ind_pos, w, c1, c2, ind_pbest, Gbest)
+function [new_vel] = update_vel(old_vel, ind_pos, w, c1, c2, ind_pbest, Gbest, vel_max, vel_min)
     r1 = rand(1,1,'uniform');
     r2 = rand(1,1,'uniform');
     new_vel = w.*old_vel + (c1*r1).*(ind_pbest - ind_pos) + (c2*r2).*(Gbest - ind_pos);
+    
+    if new_vel(1,1) > vel_max then
+        new_vel(1,1) = vel_max
+    elseif new_vel(1,1) < vel_min then
+        new_vel(1,1) = vel_min
+    end
+    
+    if new_vel(1,2) > vel_max then
+        new_vel(1,2) = vel_max
+    elseif new_vel(1,2) < vel_min then
+        new_vel(1,2) = vel_min
+    end
 endfunction
 
 /* Update the position of the particle
@@ -72,6 +86,18 @@ endfunction
    old_pos -> old particle position
    new_vel -> new velocity of the particle
 */
-function [new_pos] = update_pos(old_pos, new_vel)
+function [new_pos] = update_pos(old_pos, new_vel, upper_lim, lower_lim)
     new_pos = old_pos + new_vel;
+    
+    if new_pos(1,1) > upper_lim then
+        new_pos(1,1) = upper_lim
+    elseif new_pos(1,1) < lower_lim then
+        new_pos(1,1) = lower_lim
+    end
+    
+    if new_pos(1,2) > upper_lim then
+        new_pos(1,2) = upper_lim
+    elseif new_pos(1,2) < lower_lim then
+        new_pos(1,2) = lower_lim
+    end
 endfunction
